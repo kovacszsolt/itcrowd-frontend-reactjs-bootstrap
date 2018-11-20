@@ -1,0 +1,7 @@
+version: "3"
+services:
+  web:
+    image: itcrowd-frontend-reactjs-bootstrap:latest
+    restart: "on-failure"
+    ports:
+    - 8091:80
