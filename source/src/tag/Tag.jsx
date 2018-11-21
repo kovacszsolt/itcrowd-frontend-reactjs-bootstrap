@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import AppList from "../list/list";
+import Services from "../Services";
 
 class AppFront extends Component {
-    url = process.env.REACT_APP_ROUTE_URL;
-
+    service = new Services();
 
     constructor(props) {
         super(props);
@@ -13,17 +13,11 @@ class AppFront extends Component {
     }
 
     componentDidMount() {
-        fetch(this.url + this.props.match.params.slug)
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    this.setState({
-                        'tweets': result.result[0].twitter_category
-                    });
-                },
-                (error) => {
-                }
-            )
+        this.service.getTweetsByCategorySlug(this.props.match.params.slug).then((getTweetsByCategoryResult) => {
+            this.setState({
+                'tweets': getTweetsByCategoryResult
+            });
+        });
     }
 
     render() {
