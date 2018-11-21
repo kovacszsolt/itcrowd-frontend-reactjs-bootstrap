@@ -26,6 +26,7 @@ class AppFront extends Component {
     trackScrolling = () => {
         const wrappedElement = document.getElementById('content');
         if (this.isBottom(wrappedElement)) {
+
             this.readData();
         }
     }
@@ -35,6 +36,7 @@ class AppFront extends Component {
     }
 
     readData() {
+        this.componentWillUnmount();
         this.service.getTweets(this.currentPage).then((tweetListsResult) => {
             const tmp = this.state.tweets;
             tmp.push(...tweetListsResult);
@@ -42,6 +44,7 @@ class AppFront extends Component {
                 'tweets': tmp
             });
             this.currentPage++;
+            document.addEventListener('scroll', this.trackScrolling);
         });
     }
 

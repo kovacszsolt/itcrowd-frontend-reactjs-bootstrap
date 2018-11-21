@@ -1,6 +1,8 @@
 class Services {
     LIST_URL = process.env.REACT_APP_TWITTER_LIST_URL;
+    UPDATEKEY_URL = process.env.REACT_APP_UPDATEKEY_URL;
     ITEMS_PET_PAGE = 5;
+    REFRESH_TIME = 60; //update key refresh rate im secund
 
     /**
      * get Tweet
@@ -77,6 +79,7 @@ class Services {
         });
     }
 
+
     /**
      * get all tweet
      * test localstorage
@@ -85,16 +88,65 @@ class Services {
      */
     _getTweetsAll() {
         return new Promise((resolve, reject) => {
-            const tweets = localStorage.getItem('tweets');
-            if (tweets === null) {
-                this._tweetLists().then((tweetListsResult) => {
-                    localStorage.setItem('tweets', JSON.stringify(tweetListsResult));
+            const updateKey = localStorage.getItem('UPDATEKEY');
+            const updateDate = localStorage.getItem('UPDATEDATE');
+            if (updateKey === null) {
+                this.__receiveData().then((receiveDataResult) => {
+                    resolve(receiveDataResult);
+                })
+            } else {
+                if (Date.now() > Number(updateDate) + (this.REFRESH_TIME * 1000)) {
+                    this.__getUpdateKey().then((getUpdateKeyResult) => {
+                        localStorage.setItem('UPDATEDATE', Date.now());
+                        if (getUpdateKeyResult.value !== updateKey) {
+                            this.__receiveData().then((receiveDataResult) => {
+                                resolve(receiveDataResult);
+                            })
+                        } else {
+                            resolve(JSON.parse(localStorage.getItem('tweets')));
+                        }
+                    });
+                } else {
+                    resolve(JSON.parse(localStorage.getItem('tweets')));
+                }
+            }
+        });
+    }
+
+    /**
+     * receive updatekey
+     * and data
+     * @returns {Promise<any>}
+     * @private
+     */
+    __receiveData() {
+        return new Promise((resolve, reject) => {
+            this.__tweetListsFromServer().then((tweetListsResult) => {
+                localStorage.setItem('tweets', JSON.stringify(tweetListsResult));
+                this.__getUpdateKey().then((getUpdateKeyResult) => {
+                    localStorage.setItem('UPDATEKEY', getUpdateKeyResult.value);
                     resolve(tweetListsResult);
                 });
-            } else {
-                resolve(JSON.parse(tweets));
-            }
+            });
+        });
+    }
 
+    /**
+     * get updatekey from Server
+     * @returns {Promise<any>}
+     * @private
+     */
+    __getUpdateKey() {
+        return new Promise((resolve, reject) => {
+            fetch(this.UPDATEKEY_URL)
+                .then(res => res.json())
+                .then(
+                    (result) => {
+                        resolve(result.result);
+                    },
+                    (error) => {
+                    }
+                )
         });
     }
 
@@ -103,7 +155,7 @@ class Services {
      * @returns {Promise<any>}
      * @private
      */
-    _tweetLists() {
+    __tweetListsFromServer() {
         return new Promise((resolve, reject) => {
             fetch(this.LIST_URL)
                 .then(res => res.json())

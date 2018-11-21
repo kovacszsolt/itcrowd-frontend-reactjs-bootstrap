@@ -22,6 +22,9 @@ class AppTweetRelation extends Component {
 
     readData(categoryList) {
         this.service.getTweetsByCategoryMultiple(categoryList).then((getTweetsByCategoryMultipleResult) => {
+            getTweetsByCategoryMultipleResult = getTweetsByCategoryMultipleResult.filter((filterResult) => {
+                return (filterResult._id !== this.props.currentId);
+            });
             this.setState(() => ({
                 'tweets': getTweetsByCategoryMultipleResult
             }))
