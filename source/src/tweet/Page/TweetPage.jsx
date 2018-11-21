@@ -1,10 +1,22 @@
 import React from 'react';
 import AppListCardCategory from "../../list/category/Category";
 import AppTweetRelation from "../Relation";
+import {Helmet} from "react-helmet";
 
 const AppTweetPage = (props) => {
     return (
         <div className="container">
+            <Helmet>
+                <title>{props.tweet.twitter_content.title}</title>
+                <meta name="description" content={props.tweet.twitter_content.content}/>
+                <meta property="og:url"
+                      content={window.location.href}/>
+                <meta property="og:type" content="article"/>
+                <meta property="og:title" content={props.tweet.twitter_content.title} />
+                <meta property="og:description" content={props.tweet.twitter_content.content} />
+                <meta property="og:image"
+                      content={process.env.REACT_APP_IMAGE_URL + props.tweet.slug + "/size2.jpg"} />
+            </Helmet>
             <div className="row">
                 <div className="col-md-8 pl-0 pr-0">
                     <img className="img-fluid" alt={props.tweet.title}
