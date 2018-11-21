@@ -2,7 +2,6 @@ import React from 'react';
 import AppListCard from "./card/Card";
 
 const AppList = (props) => {
-    //console.log(props);
     return (
         <main>
             <div className="card-columns">

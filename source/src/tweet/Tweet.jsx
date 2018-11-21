@@ -1,13 +1,15 @@
 import React, {Component} from 'react';
 import AppTweetPage from "./Page/TweetPage";
+import Services from "../Services";
 
 class AppTweet extends Component {
-    url = process.env.REACT_APP_ROUTE_URL;
+    service = new Services();
 
     constructor(props) {
         super(props);
         this.state = {
-            tweet: null
+            tweet: null,
+            categoryList: null
         }
     }
 
@@ -16,23 +18,17 @@ class AppTweet extends Component {
     }
 
     readData(slug) {
-        fetch(this.url + slug)
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    this.setState({
-                        'tweet': result.result[0].twitter_tweet
-                    });
-                    const categoryList = this.state.tweet.twitter_category.map((a) => {
-                        return a.title;
-                    }).join(',');
-                    this.setState({
-                        'categoryList': categoryList
-                    });
-                },
-                (error) => {
-                }
-            )
+        this.service.getTweetsBySlug(slug).then((getTweetsBySlugResult) => {
+            this.setState({
+                'tweet': getTweetsBySlugResult
+            });
+            const categoryList = this.state.tweet.twitter_category.map((categoryMapResult) => {
+                return categoryMapResult._id;
+            });
+            this.setState({
+                'categoryList': categoryList
+            });
+        })
     }
 
     componentDidMount() {
@@ -41,11 +37,12 @@ class AppTweet extends Component {
 
     render() {
 
-        if (this.state.tweet === null) {
+        if (this.state.categoryList === null) {
             return null;
         } else {
             return (
-                <AppTweetPage tweet={this.state.tweet} categoryList={this.state.categoryList}></AppTweetPage>
+                <AppTweetPage tweet={this.state.tweet}
+                              categoryList={this.state.categoryList}></AppTweetPage>
             );
         }
 

@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import AppListSimple from "../list/simple/Simple";
+import Services from "../Services";
 
 class AppTweetRelation extends Component {
+    service = new Services();
     url_cagetory = process.env.REACT_APP_TWITTER_CATEGORY_LIST_URL;
 
     constructor(props) {
@@ -20,16 +22,11 @@ class AppTweetRelation extends Component {
     }
 
     readData(categoryList) {
-        if (categoryList !== undefined) {
-            fetch(this.url_cagetory + categoryList)
-                .then(res => res.json())
-                .then(
-                    (result) => {
-                        this.setState(() => ({
-                            'tweets': result.result
-                        }))
-                    });
-        }
+        this.service.getTweetsByCategoryMultiple(categoryList).then((a) => {
+            this.setState(() => ({
+                'tweets': a
+            }))
+        });
     }
 
 
