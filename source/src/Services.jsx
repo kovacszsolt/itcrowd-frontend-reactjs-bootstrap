@@ -1,7 +1,7 @@
 class Services {
     LIST_URL = process.env.REACT_APP_TWITTER_LIST_URL;
     UPDATEKEY_URL = process.env.REACT_APP_UPDATEKEY_URL;
-    ITEMS_PET_PAGE = 5;
+    ITEMS_PET_PAGE = 6;
     REFRESH_TIME = 60; //update key refresh rate im secund
 
     /**
