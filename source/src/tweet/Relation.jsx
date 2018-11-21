@@ -4,7 +4,6 @@ import Services from "../Services";
 
 class AppTweetRelation extends Component {
     service = new Services();
-    url_cagetory = process.env.REACT_APP_TWITTER_CATEGORY_LIST_URL;
 
     constructor(props) {
         super(props);
@@ -22,13 +21,12 @@ class AppTweetRelation extends Component {
     }
 
     readData(categoryList) {
-        this.service.getTweetsByCategoryMultiple(categoryList).then((a) => {
+        this.service.getTweetsByCategoryMultiple(categoryList).then((getTweetsByCategoryMultipleResult) => {
             this.setState(() => ({
-                'tweets': a
+                'tweets': getTweetsByCategoryMultipleResult
             }))
         });
     }
-
 
     render() {
         if (this.state.tweets !== null) {
