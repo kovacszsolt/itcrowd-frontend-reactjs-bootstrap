@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
 import AppList from "../list/list";
+import Services from "../Services";
 
 class AppFront extends Component {
-    url = process.env.REACT_APP_TWITTER_LIST_URL;
+    service = new Services();
 
+    currentPage = 1;
 
     constructor(props) {
         super(props);
@@ -13,21 +15,34 @@ class AppFront extends Component {
     }
 
     componentDidMount() {
-        this.readData(this.url);
+        this.readData();
+        document.addEventListener('scroll', this.trackScrolling);
     }
 
-    readData(url) {
-        fetch(url)
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    this.setState({
-                        'tweets': result.result
-                    });
-                },
-                (error) => {
-                }
-            )
+    componentWillUnmount() {
+        document.removeEventListener('scroll', this.trackScrolling);
+    }
+
+    trackScrolling = () => {
+        const wrappedElement = document.getElementById('content');
+        if (this.isBottom(wrappedElement)) {
+            this.readData();
+        }
+    }
+
+    isBottom(el) {
+        return el.getBoundingClientRect().bottom <= window.innerHeight;
+    }
+
+    readData() {
+        this.service.getTweets(this.currentPage).then((tweetListsResult) => {
+            const tmp = this.state.tweets;
+            tmp.push(...tweetListsResult);
+            this.setState({
+                'tweets': tmp
+            });
+            this.currentPage++;
+        });
     }
 
     render() {
@@ -35,7 +50,9 @@ class AppFront extends Component {
             return null;
         } else {
             return (
-                <AppList tweets={this.state.tweets}></AppList>
+                <div id={"content"}>
+                    <AppList tweets={this.state.tweets}></AppList>
+                </div>
             );
         }
 

@@ -7,7 +7,8 @@ const AppListCard = (props) => {
     return (
 
         <div className="card rounded-0  border border-primary ">
-            <img className="card-img-top rounded-0" src={props.tweet.twitter_content.imageurl}
+            <img className="card-img-top rounded-0"
+                 src={process.env.REACT_APP_IMAGE_URL + props.tweet.slug + "/size1.jpg"}
                  alt={props.tweet.twitter_content.title}/>
 
             <div className="card-body">

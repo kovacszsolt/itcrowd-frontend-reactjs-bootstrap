@@ -11,8 +11,12 @@ class AppTweet extends Component {
         }
     }
 
-    componentDidMount() {
-        fetch(this.url + this.props.match.params.slug)
+    componentWillReceiveProps(nextProps) {
+        this.readData(nextProps.match.params.slug);
+    }
+
+    readData(slug) {
+        fetch(this.url + slug)
             .then(res => res.json())
             .then(
                 (result) => {
@@ -29,6 +33,10 @@ class AppTweet extends Component {
                 (error) => {
                 }
             )
+    }
+
+    componentDidMount() {
+        this.readData(this.props.match.params.slug);
     }
 
     render() {
