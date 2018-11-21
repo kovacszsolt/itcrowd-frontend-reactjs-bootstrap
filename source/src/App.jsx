@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import ReactGA from 'react-ga';
 import './App.css';
 import './front/Front'
 import Front from "./front/Front";
@@ -8,7 +9,10 @@ import Tweet from "./tweet/Tweet";
 import Tag from "./tag/Tag";
 
 class App extends Component {
+
     render() {
+        ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_KEY);
+        ReactGA.pageview(window.location.pathname + window.location.search);
         return (
             <Router>
                 <div className="w-100 p-3">
