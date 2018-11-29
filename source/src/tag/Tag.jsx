@@ -2,6 +2,7 @@ import React, {Component, Fragment} from 'react';
 import AppList from "../list/list";
 import Services from "../Services";
 import {Helmet} from "react-helmet";
+import AppListCardCategory from "../list/category/Category";
 
 class AppFront extends Component {
     service = new Services();
@@ -9,14 +10,21 @@ class AppFront extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            tweets: []
+            tweets: [],
+            category: []
         }
     }
 
     componentDidMount() {
         this.service.getTweetsByCategorySlug(this.props.match.params.slug).then((getTweetsByCategoryResult) => {
+            console.log(getTweetsByCategoryResult);
             this.setState({
                 'tweets': getTweetsByCategoryResult
+            });
+        });
+        this.service.getCategory().then((categoryListResult) => {
+            this.setState({
+                'category': categoryListResult
             });
         });
     }
@@ -39,7 +47,15 @@ class AppFront extends Component {
                         <meta property="og:image"
                               content="https://itcrowd.hu/logo.png"/>
                     </Helmet>
-                    <AppList tweets={this.state.tweets}></AppList>
+                    <div className="row">
+                        <div className="col-md-10" id={"content"}>
+
+                            <AppList tweets={this.state.tweets}></AppList>
+                        </div>
+                        <div className="col-md-2 mt-5 sidebar d-none d-md-block d-sm-none">
+                            <AppListCardCategory category={this.state.category}/>
+                        </div>
+                    </div>
                 </Fragment>
             );
         }

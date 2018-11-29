@@ -6,6 +6,7 @@ const AppList = (props) => {
         <main>
             <div className="card-columns">
                 {props.tweets.map((tweet) => {
+
                     return (
                         <AppListCard key={tweet._id} tweet={tweet}/>
                     );

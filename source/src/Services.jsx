@@ -1,15 +1,17 @@
-class Services {
-    LIST_URL = process.env.REACT_APP_TWITTER_LIST_URL;
-    UPDATEKEY_URL = process.env.REACT_APP_UPDATEKEY_URL;
-    ITEMS_PET_PAGE = 6;
-    REFRESH_TIME = 60; //update key refresh rate im secund
+import ServicesRemote from "./Services.remote";
 
-    /**
-     * get Tweet
-     * with page
-     * @param pageNumber
-     * @returns {Promise<any>}
-     */
+const CircularJSON = require('circular-json');
+
+class Services extends ServicesRemote {
+    UPDATEKEY_URL = process.env.REACT_APP_UPDATEKEY_URL;
+    STORAGE_KEY_TWEETLIST = 'TWEETLIST';
+    STORAGE_KEY_CATEGORYLIST = 'CATEGORYLIST';
+    STORAGE_KEY_UPDATE = 'UPDATE';
+
+    ITEMS_PET_PAGE = 6;
+    REFRESH_TIME = 120; //update key refresh rate im secund
+
+
     getTweets(pageNumber = 1) {
         return new Promise((resolve, reject) => {
             this._getTweetsAll().then((_getTweetsAllResult) => {
@@ -18,156 +20,84 @@ class Services {
         });
     }
 
-    getTweetsBySlug(tweetSlug) {
+    getTweet(tweetSlug) {
         return new Promise((resolve, reject) => {
-            this._getTweetsAll().then((getTweetsAllResult) => {
-                resolve(getTweetsAllResult.find(getTweetsAllResultFind => getTweetsAllResultFind.slug === tweetSlug));
+            this._getTweetsAll().then((_getTweetsAllResult) => {
+                resolve(_getTweetsAllResult.find(findResult => findResult.slug === tweetSlug));
             });
         });
     }
 
-    getTweetsByCategoryMultiple(categoryId) {
+    getCategory() {
         return new Promise((resolve, reject) => {
-            Promise.all(
-                categoryId.map((categoryListResult) => {
-                    return this.getTweetsByCategoryId(categoryListResult);
-                })
-            ).then((categoryListMapResult) => {
-                const tweets = [];
-                categoryListMapResult.flat().forEach((flatResult) => {
-                    if (tweets.find((findResult) => {
-                        return (JSON.stringify(findResult) === JSON.stringify(flatResult))
-                    }) === undefined) {
-                        tweets.push(flatResult);
-                    }
-                });
-                resolve(tweets);
+            this._getTweetsAll().then((_getTweetsAllResult) => {
+                resolve(CircularJSON.parse(localStorage.getItem(this.STORAGE_KEY_CATEGORYLIST)));
             });
         });
     }
 
-    /**
-     * get tweets where category slug
-     * @param categorySlug
-     * @returns {Promise<any>}
-     */
     getTweetsByCategorySlug(categorySlug) {
         return new Promise((resolve, reject) => {
-            this._getTweetsAll().then((getTweetsAllResult) => {
-                const tweets = [];
-                getTweetsAllResult.forEach((getTweetsAllResultMapResult) => {
-                    if (getTweetsAllResultMapResult.twitter_category.filter(filterResult => filterResult.slug === categorySlug).length !== 0) {
-                        tweets.push(getTweetsAllResultMapResult);
-                    }
-                });
-                resolve(tweets);
+            this._getTweetsAll().then((w) => {
+                const catgory = CircularJSON.parse(localStorage.getItem(this.STORAGE_KEY_CATEGORYLIST));
+                resolve(catgory.find(q => q.slug === categorySlug).twitter);
             });
         });
     }
 
-    getTweetsByCategoryId(categoryId) {
+    _setUpdate(key) {
+        localStorage.setItem(this.STORAGE_KEY_UPDATE, CircularJSON.stringify({key: key, date: Date.now()}));
+    }
+
+    _getUpdate() {
+        return (localStorage.getItem(this.STORAGE_KEY_UPDATE) === null) ? null : CircularJSON.parse(localStorage.getItem(this.STORAGE_KEY_UPDATE));
+    }
+
+    _stroreData() {
         return new Promise((resolve, reject) => {
-            this._getTweetsAll().then((getTweetsAllResult) => {
-                const tweets = [];
-                getTweetsAllResult.forEach((getTweetsAllResultMapResult) => {
-                    if (getTweetsAllResultMapResult.twitter_category.filter(filterResult => filterResult._id === categoryId).length !== 0) {
-                        tweets.push(getTweetsAllResultMapResult);
-                    }
-                });
-                resolve(tweets);
+            return Promise.all([this.RemoteUpdateKey(), this.__receiveData()]).then((PromiseAllReceive) => {
+                const updateKey = PromiseAllReceive[0];
+                const data = PromiseAllReceive[1];
+                localStorage.setItem(this.STORAGE_KEY_TWEETLIST, CircularJSON.stringify(data.tweetList));
+                localStorage.setItem(this.STORAGE_KEY_CATEGORYLIST, CircularJSON.stringify(data.categoryList));
+                this._setUpdate(updateKey.value);
+                resolve(true);
             });
         });
     }
 
-
-    /**
-     * get all tweet
-     * test localstorage
-     * @returns {Promise<any>}
-     * @private
-     */
     _getTweetsAll() {
         return new Promise((resolve, reject) => {
-            const updateKey = localStorage.getItem('UPDATEKEY');
-            const updateDate = localStorage.getItem('UPDATEDATE');
-            if (updateKey === null) {
-                this.__receiveData().then((receiveDataResult) => {
-                    resolve(receiveDataResult);
-                })
+            if ((this._getUpdate() === null) || (Date.now() > Number(this._getUpdate().date) + (this.REFRESH_TIME * 1000))) {
+                this._stroreData().then((qq) => {
+                    resolve(CircularJSON.parse(localStorage.getItem(this.STORAGE_KEY_TWEETLIST)));
+                });
             } else {
-                if (Date.now() > Number(updateDate) + (this.REFRESH_TIME * 1000)) {
-                    this.__getUpdateKey().then((getUpdateKeyResult) => {
-                        localStorage.setItem('UPDATEDATE', Date.now());
-                        if (getUpdateKeyResult.value !== updateKey) {
-                            this.__receiveData().then((receiveDataResult) => {
-                                resolve(receiveDataResult);
-                            })
-                        } else {
-                            resolve(JSON.parse(localStorage.getItem('tweets')));
-                        }
-                    });
-                } else {
-                    resolve(JSON.parse(localStorage.getItem('tweets')));
-                }
+                resolve(CircularJSON.parse(localStorage.getItem(this.STORAGE_KEY_TWEETLIST)));
             }
         });
     }
 
-    /**
-     * receive updatekey
-     * and data
-     * @returns {Promise<any>}
-     * @private
-     */
+
     __receiveData() {
-        return new Promise((resolve, reject) => {
-            this.__tweetListsFromServer().then((tweetListsResult) => {
-                localStorage.setItem('tweets', JSON.stringify(tweetListsResult));
-                this.__getUpdateKey().then((getUpdateKeyResult) => {
-                    localStorage.setItem('UPDATEKEY', getUpdateKeyResult.value);
-                    resolve(tweetListsResult);
-                });
+        return Promise.all([this.RemoteTweetList(), this.RemoteCategoryList()]).then((promiseAllResponse) => {
+                return this.__tweetListPopulateCategory(promiseAllResponse[0], promiseAllResponse[1]);
+            }
+        )
+    }
+
+    __tweetListPopulateCategory(tweetList, categoryList) {
+        categoryList.map((categoryListMapResult) => {
+            categoryListMapResult.twitter = tweetList.filter(tweetListFilterResult => tweetListFilterResult.twitter_category.includes(categoryListMapResult._id));
+        });
+        tweetList.map((tweet) => {
+            tweet.twitter_category = tweet.twitter_category.map((twitter_category) => {
+                return (categoryList.find(findResult => findResult._id === twitter_category));
             });
         });
+        return {categoryList: categoryList, tweetList: tweetList};
     }
 
-    /**
-     * get updatekey from Server
-     * @returns {Promise<any>}
-     * @private
-     */
-    __getUpdateKey() {
-        return new Promise((resolve, reject) => {
-            fetch(this.UPDATEKEY_URL)
-                .then(res => res.json())
-                .then(
-                    (result) => {
-                        resolve(result.result);
-                    },
-                    (error) => {
-                    }
-                )
-        });
-    }
-
-    /**
-     * get data from server
-     * @returns {Promise<any>}
-     * @private
-     */
-    __tweetListsFromServer() {
-        return new Promise((resolve, reject) => {
-            fetch(this.LIST_URL)
-                .then(res => res.json())
-                .then(
-                    (result) => {
-                        resolve(result.result);
-                    },
-                    (error) => {
-                    }
-                )
-        });
-    }
 }
 
 export default Services;
