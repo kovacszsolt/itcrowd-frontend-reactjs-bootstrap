@@ -41,7 +41,6 @@ class AppSearch extends Component {
         this.readData(event.target.value);
     }
 
-//    <AppList tweets={this.state.tweets}></AppList>
     render() {
         return (
             <div className="row mt-5">

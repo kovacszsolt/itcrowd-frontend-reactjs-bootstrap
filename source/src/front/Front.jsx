@@ -62,7 +62,7 @@ class AppFront extends Component {
         } else {
             return (
                 <div className="row">
-                    <div className="col-md-10" id={"content"}>
+                    <div className="col-md-10 mt-5" id={"content"}>
                         <AppList tweets={this.state.tweets}></AppList>
                     </div>
                     <div className="col-md-2 mt-5 sidebar d-none d-md-block d-sm-none">
