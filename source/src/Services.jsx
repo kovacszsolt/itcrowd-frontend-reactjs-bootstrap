@@ -60,7 +60,7 @@ class Services extends ServicesRemote {
                 const data = PromiseAllReceive[1];
                 localStorage.setItem(this.STORAGE_KEY_TWEETLIST, CircularJSON.stringify(data.tweetList));
                 localStorage.setItem(this.STORAGE_KEY_CATEGORYLIST, CircularJSON.stringify(data.categoryList));
-                this._setUpdate(updateKey.value);
+                this._setUpdate((updateKey === undefined ? 'dummy' : updateKey.value));
                 resolve(true);
             });
         });
