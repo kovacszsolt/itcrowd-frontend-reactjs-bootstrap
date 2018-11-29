@@ -9,7 +9,7 @@ class Services extends ServicesRemote {
     STORAGE_KEY_UPDATE = 'UPDATE';
 
     ITEMS_PET_PAGE = 6;
-    REFRESH_TIME = 2; //update key refresh rate im secund
+    REFRESH_TIME = 120; //update key refresh rate im secund
 
 
     /**
