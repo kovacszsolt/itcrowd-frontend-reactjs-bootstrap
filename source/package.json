@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": false,
   "dependencies": {
+    "circular-json": "^0.5.9",
     "random-string": "^0.2.0",
     "react": "^16.6.0",
     "react-dom": "^16.6.0",

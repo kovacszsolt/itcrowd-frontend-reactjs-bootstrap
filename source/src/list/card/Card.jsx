@@ -9,15 +9,15 @@ const AppListCard = (props) => {
         <div className="card rounded-0  border border-primary ">
             <img className="card-img-top rounded-0"
                  src={process.env.REACT_APP_IMAGE_URL + props.tweet.slug + "/size1.jpg"}
-                 alt={props.tweet.twitter_content.title}/>
+                 alt={props.tweet.title}/>
 
             <div className="card-body">
-                <h5 className="card-title"><a href={"/" + props.tweet.slug}>{props.tweet.twitter_content.title}</a></h5>
+                <h5 className="card-title"><a href={"/" + props.tweet.slug}>{props.tweet.title}</a></h5>
                 <p>
-                    <small className="text-muted">{props.tweet.twitter_content.createdAt}</small>
+                    <small className="text-muted">{props.tweet.createdAt}</small>
                 </p>
                 <AppListCardCategory category={props.tweet.twitter_category}/>
-                <p className="card-text">{props.tweet.twitter_content.content}</p>
+                <p className="card-text">{props.tweet.content}</p>
 
             </div>
         </div>
