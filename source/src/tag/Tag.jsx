@@ -17,7 +17,6 @@ class AppFront extends Component {
 
     componentDidMount() {
         this.service.getTweetsByCategorySlug(this.props.match.params.slug).then((getTweetsByCategoryResult) => {
-            console.log(getTweetsByCategoryResult);
             this.setState({
                 'tweets': getTweetsByCategoryResult
             });

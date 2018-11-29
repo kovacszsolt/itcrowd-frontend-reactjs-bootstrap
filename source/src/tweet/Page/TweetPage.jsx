@@ -4,7 +4,6 @@ import {Helmet} from "react-helmet";
 import AppListSimple from "../../list/simple/Simple";
 
 const AppTweetPage = (props) => {
-    console.log('props', props);
     return (
         <div className="container">
             <Helmet>
