@@ -23,7 +23,7 @@ class AppTweet extends Component {
                 'tweet': getTweetsBySlugResult
             });
 
-            Promise.all(getTweetsBySlugResult.twitter_category.map((twitterCategoryResult) => this.service.getTweetsByCategorySlug(twitterCategoryResult.slug))).then((getTweetsByCategorySlugResult) => {
+            Promise.all(getTweetsBySlugResult.twitter_category_full.map((twitterCategoryResult) => this.service.getTweetsByCategorySlug(twitterCategoryResult.slug))).then((getTweetsByCategorySlugResult) => {
                 const categoryTweetList = [...new Set([].concat(...getTweetsByCategorySlugResult))];
                 const categoryList = [];
                 categoryTweetList.forEach((forEachResult) => {
@@ -35,6 +35,7 @@ class AppTweet extends Component {
                     'categoryList': categoryList
                 });
             })
+
         })
     }
 

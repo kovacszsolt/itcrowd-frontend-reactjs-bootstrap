@@ -3,6 +3,7 @@ import AppList from "../list/list";
 import Services from "../Services";
 import AppListCardCategory from "../list/category/Category";
 import './Front.css';
+
 class AppFront extends Component {
     service = new Services();
 
@@ -53,7 +54,6 @@ class AppFront extends Component {
                 'category': categoryListResult
             });
         });
-
     }
 
     render() {

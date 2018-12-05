@@ -10,7 +10,6 @@ class AppHeader extends Component {
     }
 
     handleChange(e) {
-        console.log('search',e);
         this.setState({search: e.target.value});
     }
 

@@ -6,14 +6,13 @@ import './Search.css';
 class AppSearch extends Component {
     service = new Services();
 
-    firstStart = true;
-
     constructor(props) {
         super(props);
         this.state = {
             tweets: [],
             category: [],
-            search: ''
+            search: '',
+            firstStart: true
         }
     }
 
@@ -23,16 +22,16 @@ class AppSearch extends Component {
     }
 
     readData(searchText) {
-        this.service.getSearchTweets(searchText, this.currentPage).then((tweetListResult) => {
+        this.service.search(searchText, this.currentPage).then((tweetListResult) => {
             this.setState({
                 'tweets': tweetListResult
             });
-            if (this.firstStart) {
-                this.firstStart = false;
+            if (this.state.firstStart) {
+                this.setState({
+                    'firstStart': false
+                });
             }
         });
-
-
     }
 
     handleChange(event) {
@@ -46,7 +45,6 @@ class AppSearch extends Component {
             <div className="row mt-5">
                 <div className="col-md-12 fixed-top mt-6">
                     <input className="form-control mr-sm-2" type="search" placeholder="Search"
-                           value={this.state.search}
                            onChange={(e) => {
                                this.handleChange(e)
                            }}
@@ -56,13 +54,13 @@ class AppSearch extends Component {
                     {(this.state.tweets.length !== 0) ? (
                         <AppList tweets={this.state.tweets}></AppList>
                     ) : (
-                        (this.firstStart) ? (
+                        (this.state.firstStart) ? (
                             <div className="d-flex justify-content-center">
-                                <img src={'/loading.gif'} title="loading" />
+                                <img alt={'Loading'} src={'/loading.gif'}/>
                             </div>
                         ) : (
                             <div className="d-flex justify-content-center">
-                                <img src={'/oops.jpg'} title="no results" />
+                                <img alt={'no results'} src={'/oops.jpg'}/>
                             </div>
                         )
                     )
