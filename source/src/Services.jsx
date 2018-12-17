@@ -10,6 +10,8 @@ class Services extends ServicesRemote {
     }
 
     search(searchText) {
+        searchText = (searchText === undefined) ? '' : searchText;
+        console.log('searchText', searchText);
         return this.getData().then((response) => {
             return response.tweetList.filter(filterResult => filterResult.title.toLowerCase().includes(searchText.toLowerCase()));
         });

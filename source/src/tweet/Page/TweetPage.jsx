@@ -15,12 +15,12 @@ const AppTweetPage = (props) => {
                 <meta property="og:title" content={props.tweet.title}/>
                 <meta property="og:description" content={props.tweet.content}/>
                 <meta property="og:image"
-                      content={process.env.REACT_APP_IMAGE_URL + props.tweet.slug + "/size2.jpg"}/>
+                      content={process.env.REACT_APP_REACT_BACKEND_SERVER +'image/size1/'+ props.tweet.slug + "."+props.tweet.imageextension}/>
             </Helmet>
             <div className="row">
                 <div className="col-md-8 pl-0 pr-0">
                     <img className="img-fluid" alt={props.tweet.title}
-                         src={process.env.REACT_APP_IMAGE_URL + props.tweet.slug + "/size2.jpg"}/>
+                         src={process.env.REACT_APP_REACT_BACKEND_SERVER +'image/size1/'+ props.tweet.slug + "."+props.tweet.imageextension}/>
                     <h1>{props.tweet.title}</h1>
                     <AppListCardCategory category={props.tweet.twitter_category_full}/>
                     <p> {props.tweet.content}</p>

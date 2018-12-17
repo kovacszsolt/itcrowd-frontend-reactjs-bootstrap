@@ -45,6 +45,7 @@ class AppSearch extends Component {
             <div className="row mt-5">
                 <div className="col-md-12 fixed-top mt-6">
                     <input className="form-control mr-sm-2" type="search" placeholder="Search"
+                           value={this.state.search}
                            onChange={(e) => {
                                this.handleChange(e)
                            }}

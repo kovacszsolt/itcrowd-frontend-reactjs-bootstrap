@@ -1,10 +1,13 @@
 import {parse, stringify} from 'flatted/esm';
 
 class ServicesRemote {
-    LIST_URL = process.env.REACT_APP_TWITTER_LIST_URL;
-    CATEGORY_URL = process.env.REACT_APP_TWITTER_CATEGORY_LIST_URL;
-    UPDATEKEY_URL = process.env.REACT_APP_UPDATEKEY_URL;
-
+    LIST_URL = process.env.REACT_APP_REACT_BACKEND_SERVER + 'twitter/tweet/list/simple/';
+    CATEGORY_URL = process.env.REACT_APP_REACT_BACKEND_SERVER + 'twitter/category/list/';
+    UPDATEKEY_URL = process.env.REACT_APP_REACT_BACKEND_SERVER + 'settings/updatetime/';
+    STORAGE_KEY_TWEETLIST = 'TWEETLIST';
+    STORAGE_KEY_CATEGORYLIST = 'CATEGORYLIST';
+    STORAGE_KEY_UPDATE = 'UPDATE';
+    REFRESH_TIME = 120;
 
     getData() {
         return new Promise((resolve, reject) => {
@@ -23,7 +26,6 @@ class ServicesRemote {
                             );
                             return category;
                         });
-
                         localStorage.setItem(this.STORAGE_KEY_TWEETLIST, stringify(data.tweetList));
                         localStorage.setItem(this.STORAGE_KEY_CATEGORYLIST, stringify(data.categoryList));
                         localStorage.setItem(this.STORAGE_KEY_UPDATE, stringify({value: data.update, date: Date.now()}));
@@ -45,9 +47,9 @@ class ServicesRemote {
     _update() {
         let _return = (localStorage.getItem(this.STORAGE_KEY_UPDATE) !== null);
         if (_return) {
-            _return = (Date.now() > Number(parse(localStorage.getItem(this.STORAGE_KEY_UPDATE)).date) + (this.REFRESH_TIME * 1000));
+            _return = (Number(parse(localStorage.getItem(this.STORAGE_KEY_UPDATE)).date) + (this.REFRESH_TIME * 1000) > Date.now());
         }
-        return true;
+        return !_return;
     }
 
 

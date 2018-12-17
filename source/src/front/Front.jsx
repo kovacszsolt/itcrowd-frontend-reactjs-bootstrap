@@ -46,6 +46,7 @@ class AppFront extends Component {
             this.setState({
                 'tweets': tmp
             });
+
             this.currentPage++;
             document.addEventListener('scroll', this.trackScrolling);
         });
