@@ -11,7 +11,6 @@ class Services extends ServicesRemote {
 
     search(searchText) {
         searchText = (searchText === undefined) ? '' : searchText;
-        console.log('searchText', searchText);
         return this.getData().then((response) => {
             return response.tweetList.filter(filterResult => filterResult.title.toLowerCase().includes(searchText.toLowerCase()));
         });
@@ -31,7 +30,7 @@ class Services extends ServicesRemote {
 
     getTweetsByCategorySlug(categorySlug) {
         return this.getData().then((response) => {
-            return response.categoryList.find(category => category.slug === categorySlug).tweets;
+            return response.tweetList.filter(category => category.tags.includes(response.categoryList.find(category => category.title === categorySlug)));
         });
     }
 

@@ -22,20 +22,6 @@ class AppTweet extends Component {
             this.setState({
                 'tweet': getTweetsBySlugResult
             });
-
-            Promise.all(getTweetsBySlugResult.twitter_category_full.map((twitterCategoryResult) => this.service.getTweetsByCategorySlug(twitterCategoryResult.slug))).then((getTweetsByCategorySlugResult) => {
-                const categoryTweetList = [...new Set([].concat(...getTweetsByCategorySlugResult))];
-                const categoryList = [];
-                categoryTweetList.forEach((forEachResult) => {
-                    if (categoryList.filter(filterResult => filterResult._id === forEachResult._id).length === 0) {
-                        categoryList.push(forEachResult);
-                    }
-                });
-                this.setState({
-                    'categoryList': categoryList
-                });
-            })
-
         })
     }
 
@@ -49,8 +35,7 @@ class AppTweet extends Component {
             return null;
         } else {
             return (
-                <AppTweetPage tweet={this.state.tweet}
-                              categoryList={this.state.categoryList}></AppTweetPage>
+                <AppTweetPage tweet={this.state.tweet}></AppTweetPage>
             );
         }
 

@@ -12,8 +12,8 @@ const AppListCardCategory = (props) => {
             <Fragment key={randomString({length: 20})}>
                 {props.category.map((category) => {
                     return (
-                        <a key={category._id} href={'/tag/' + category.slug}
-                           className="mr-1 badge badge-success">{category.title} ({category.tweets.length})</a>
+                        <a key={category.title} href={'/tag/' + category.title}
+                           className="mr-1 badge badge-success">{category.title} ({category.count})</a>
                     )
                 })
                 }
