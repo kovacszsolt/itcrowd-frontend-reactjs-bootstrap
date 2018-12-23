@@ -19,23 +19,19 @@ class AppTweet extends Component {
 
     readData(slug) {
         this.service.getTweet(slug).then((getTweetsBySlugResult) => {
-            this.setState({
-                'tweet': getTweetsBySlugResult
-            });
-
-            Promise.all(getTweetsBySlugResult.twitter_category_full.map((twitterCategoryResult) => this.service.getTweetsByCategorySlug(twitterCategoryResult.slug))).then((getTweetsByCategorySlugResult) => {
-                const categoryTweetList = [...new Set([].concat(...getTweetsByCategorySlugResult))];
-                const categoryList = [];
-                categoryTweetList.forEach((forEachResult) => {
-                    if (categoryList.filter(filterResult => filterResult._id === forEachResult._id).length === 0) {
-                        categoryList.push(forEachResult);
+            const tags = getTweetsBySlugResult.tags;
+            const relationTweetList = [];
+            tags.forEach((tag) => {
+                this.service.getStaticTweetsAll().filter(a => a.tags.includes(tag)).forEach((relTweet) => {
+                    if ((relationTweetList.find(relationTweet => relationTweet.id === relTweet.id) === undefined) && (relTweet.id !== getTweetsBySlugResult.id)) {
+                        relationTweetList.push(relTweet);
                     }
                 });
-                this.setState({
-                    'categoryList': categoryList
-                });
-            })
-
+            });
+            this.setState({
+                'tweet': getTweetsBySlugResult,
+                'tweetRelation': relationTweetList
+            });
         })
     }
 
@@ -49,8 +45,7 @@ class AppTweet extends Component {
             return null;
         } else {
             return (
-                <AppTweetPage tweet={this.state.tweet}
-                              categoryList={this.state.categoryList}></AppTweetPage>
+                <AppTweetPage tweet={this.state.tweet} tweetRelationList={this.state.tweetRelation}></AppTweetPage>
             );
         }
 

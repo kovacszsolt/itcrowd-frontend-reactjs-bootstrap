@@ -20,4 +20,3 @@ const AppListSimple = (props) => {
     }
 }
 export default AppListSimple;
-
