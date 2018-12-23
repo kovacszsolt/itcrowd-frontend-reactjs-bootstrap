@@ -1,4 +1,5 @@
 import ServicesRemote from "./Services.remote";
+import {parse} from 'flatted/esm';
 
 class Services extends ServicesRemote {
     ITEMS_PET_PAGE = 6;
@@ -22,6 +23,10 @@ class Services extends ServicesRemote {
         });
     }
 
+    getStaticTweetsAll() {
+        return parse(localStorage.getItem(this.STORAGE_KEY_TWEETLIST));
+    }
+
     getCategory() {
         return this.getData().then((response) => {
             return response.categoryList;
@@ -30,7 +35,7 @@ class Services extends ServicesRemote {
 
     getTweetsByCategorySlug(categorySlug) {
         return this.getData().then((response) => {
-            return response.tweetList.filter(category => category.tags.includes(response.categoryList.find(category => category.title === categorySlug)));
+            return response.tweetList.filter(category => category.tags.includes(categorySlug));
         });
     }
 

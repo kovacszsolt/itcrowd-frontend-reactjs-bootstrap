@@ -1,5 +1,6 @@
 import React from 'react';
 import AppListCardCategory from "../../list/category/Category";
+import AppListSimple from "../../list/simple/Simple";
 import {Helmet} from "react-helmet";
 
 const AppTweetPage = (props) => {
@@ -17,15 +18,18 @@ const AppTweetPage = (props) => {
                       content={process.env.REACT_APP_REACT_BACKEND_SERVER +'image/size1/'+ props.tweet.slug + "."+props.tweet.extension}/>
             </Helmet>
             <div className="row">
-                <div className="col-md-12">
+                <div className="col-md-8">
                     <img className="img-fluid" alt={props.tweet.title}
                          src={process.env.REACT_APP_REACT_BACKEND_SERVER +'image/size2/'+ props.tweet.slug + "."+props.tweet.extension}/>
                     <h1>{props.tweet.title}</h1>
-                    <AppListCardCategory category={props.tweet.tags}/>
+                    <AppListCardCategory category={props.tweet.tagsext}/>
                     <p> {props.tweet.description}</p>
                     <a className="btn btn-info btn-block " target={"_blank"} href={props.tweet.url}>jump
                         to the
                         article</a>
+                </div>
+                <div className="col-md-4">
+                    <AppListSimple tweets={props.tweetRelationList}></AppListSimple>
                 </div>
             </div>
         </div>
