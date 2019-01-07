@@ -22,7 +22,7 @@ const AppTweetPage = (props) => {
                     <img className="img-fluid" alt={props.tweet.title}
                          src={process.env.REACT_APP_REACT_IMAGE_PATH +'size2/'+ props.tweet.slug + "."+props.tweet.extension}/>
                     <h1>{props.tweet.title}</h1>
-                    <AppListCardCategory category={props.tweet.tagsext}/>
+                    <AppListCardCategory category={props.tweet.tags}/>
                     <p> {props.tweet.description}</p>
                     <a className="btn btn-info btn-block " target={"_blank"} href={props.tweet.url}>jump
                         to the

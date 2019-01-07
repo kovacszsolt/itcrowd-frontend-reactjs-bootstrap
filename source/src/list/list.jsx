@@ -4,7 +4,7 @@ import AppListCard from "./card/Card";
 const AppList = (props) => {
     return (
         <main>
-            <div className="card-columns">
+            <div key={props.tweets} className="card-columns">
                 {props.tweets.map((tweet) => {
 
                     return (

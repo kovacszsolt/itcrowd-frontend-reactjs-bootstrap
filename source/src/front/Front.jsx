@@ -1,12 +1,8 @@
 import React, {Component} from 'react';
 import AppList from "../list/list";
 import Services from "../Services";
-import AppListCardCategory from "../list/category/Category";
-import './Front.css';
 
 class AppFront extends Component {
-    service = new Services();
-
     currentPage = 1;
 
     constructor(props) {
@@ -18,6 +14,8 @@ class AppFront extends Component {
     }
 
     componentDidMount() {
+
+
         this.readData();
         document.addEventListener('scroll', this.trackScrolling);
     }
@@ -40,20 +38,14 @@ class AppFront extends Component {
 
     readData() {
         this.componentWillUnmount();
-        this.service.getTweets(this.currentPage).then((tweetListResult) => {
+        Services.getTweets(this.currentPage).then((tweetList) => {
             const tmp = this.state.tweets;
-            tmp.push(...tweetListResult);
+            tmp.push(...tweetList);
             this.setState({
                 'tweets': tmp
             });
-
             this.currentPage++;
             document.addEventListener('scroll', this.trackScrolling);
-        });
-        this.service.getCategory().then((categoryListResult) => {
-            this.setState({
-                'category': categoryListResult
-            });
         });
     }
 
@@ -61,14 +53,10 @@ class AppFront extends Component {
         if (this.state.tweets.length === 0) {
             return null;
         } else {
+            console.log(this.state.tweets);
             return (
-                <div className="row">
-                    <div className="col-md-10 mt-5" id={"content"}>
-                        <AppList tweets={this.state.tweets}></AppList>
-                    </div>
-                    <div className="col-md-2 mt-5 sidebar d-none d-md-block d-sm-none">
-                        <AppListCardCategory category={this.state.category}/>
-                    </div>
+                <div className="row" id={"content"}>
+                    <AppList tweets={this.state.tweets}></AppList>
                 </div>
             );
         }
