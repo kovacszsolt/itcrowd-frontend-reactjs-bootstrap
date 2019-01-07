@@ -2,7 +2,6 @@ import React, {Component, Fragment} from 'react';
 import AppList from "../list/list";
 import Services from "../Services";
 import {Helmet} from "react-helmet";
-import AppListCardCategory from "../list/category/Category";
 
 class AppFront extends Component {
 
@@ -42,13 +41,8 @@ class AppFront extends Component {
                               content="https://itcrowd.hu/logo.png"/>
                     </Helmet>
                     <div className="row">
-                        <div className="col-md-10" id={"content"}>
 
-                            <AppList tweets={this.state.tweets}></AppList>
-                        </div>
-                        <div className="col-md-2 mt-5 sidebar d-none d-md-block d-sm-none">
-                            <AppListCardCategory category={this.state.category}/>
-                        </div>
+                        <AppList tweets={this.state.tweets}></AppList>
                     </div>
                 </Fragment>
             );

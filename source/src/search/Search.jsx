@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import AppList from "../list/list";
 import Services from "../Services";
 import './Search.css';
@@ -50,7 +50,7 @@ class AppSearch extends Component {
                            }}
                            aria-label="Search"/>
                 </div>
-                <div className="col-md-12 mt-6">
+                <Fragment>
                     {(this.state.tweets.length !== 0) ? (
                         <AppList tweets={this.state.tweets}></AppList>
                     ) : (
@@ -65,7 +65,7 @@ class AppSearch extends Component {
                         )
                     )
                     }
-                </div>
+                </Fragment>
             </div>
         );
 
