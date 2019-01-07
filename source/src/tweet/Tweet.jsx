@@ -3,7 +3,6 @@ import AppTweetPage from "./Page/TweetPage";
 import Services from "../Services";
 
 class AppTweet extends Component {
-    service = new Services();
 
     constructor(props) {
         super(props);
@@ -18,19 +17,24 @@ class AppTweet extends Component {
     }
 
     readData(slug) {
-        this.service.getTweet(slug).then((getTweetsBySlugResult) => {
-            const tags = getTweetsBySlugResult.tags;
-            const relationTweetList = [];
-            tags.forEach((tag) => {
-                this.service.getStaticTweetsAll().filter(a => a.tags.includes(tag)).forEach((relTweet) => {
-                    if ((relationTweetList.find(relationTweet => relationTweet.id === relTweet.id) === undefined) && (relTweet.id !== getTweetsBySlugResult.id)) {
-                        relationTweetList.push(relTweet);
-                    }
+        Services.getTweet(slug).then((tweet) => {
+            let relationTweetList = [];
+            Promise.all(tweet.tags.map((tag) => {
+                return Services.getCategory(tag);
+            })).then((promiseArray) => {
+                promiseArray.forEach((promiseItem) => {
+                    promiseItem.forEach((relationTweet) => {
+                        if (relationTweetList.find(a => a._id === relationTweet._id) === undefined) {
+                            relationTweetList.push(relationTweet);
+                        }
+                    });
+                    relationTweetList = relationTweetList.filter(a => a._id !== tweet._id);
                 });
-            });
-            this.setState({
-                'tweet': getTweetsBySlugResult,
-                'tweetRelation': relationTweetList
+                this.setState({
+                    'tweet': tweet,
+                    'tweetRelation': relationTweetList
+                });
+                console.log(relationTweetList);
             });
         })
     }

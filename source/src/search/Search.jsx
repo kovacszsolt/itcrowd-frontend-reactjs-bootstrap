@@ -22,7 +22,7 @@ class AppSearch extends Component {
     }
 
     readData(searchText) {
-        this.service.search(searchText, this.currentPage).then((tweetListResult) => {
+        Services.findTweet(searchText).then((tweetListResult) => {
             this.setState({
                 'tweets': tweetListResult
             });

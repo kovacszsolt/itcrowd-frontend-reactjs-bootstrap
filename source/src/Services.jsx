@@ -1,58 +1,60 @@
 import ServicesRemote from "./Services.remote";
-import {parse} from 'flatted/esm';
+import {getCategory, getTweet, getTweetKeys, getTweets} from "./Services.indexeddb";
 
-class Services extends ServicesRemote {
-    ITEMS_PET_PAGE = 6;
+const ITEMS_PET_PAGE = 6;
 
-    getTweets(pageNumber = 1) {
-        return this.getData().then((response) => {
-            return response.tweetList.slice((pageNumber - 1) * this.ITEMS_PET_PAGE, pageNumber * this.ITEMS_PET_PAGE);
-        });
+class Services {
+    static getData() {
+        return ServicesRemote.getData();
     }
 
-    search(searchText) {
-        searchText = (searchText === undefined) ? '' : searchText;
-        return this.getData().then((response) => {
-            return response.tweetList.filter(filterResult => filterResult.title.toLowerCase().includes(searchText.toLowerCase()));
-        });
-    }
-
-    getTweetsAll() {
-        return this.getData().then((response) => {
-            return response.tweetList;
-        });
-    }
-
-    getStaticTweetsAll() {
-        return parse(localStorage.getItem(this.STORAGE_KEY_TWEETLIST));
-    }
-
-    getCategory() {
-        return this.getData().then((response) => {
-            return response.categoryList;
-        });
-    }
-
-    getTweetsByCategorySlug(categorySlug) {
-        return this.getData().then((response) => {
-            return response.tweetList.filter(category => category.tags.includes(categorySlug));
-        });
-    }
-
-    getTweet(tweetSlug) {
-        return this.getData().then((response) => {
-            return response.tweetList.find(a => a.slug === tweetSlug);
-        });
-    }
-
-    getTweetsByCategoryMultiple(categoryIds) {
-        return this.getData().then((response) => {
-            let tweetList = [];
-            response.categoryList.filter(filterResult => categoryIds.includes(filterResult._id)).forEach((forEachResult) => {
-                tweetList = tweetList.concat(forEachResult.tweets);
+    static getTweets(pageNumber = 1) {
+        return ServicesRemote.getData().then(() => {
+            return getTweets(pageNumber).then((result) => {
+                return result;
             });
+        });
+    }
 
-            return tweetList;
+    static getCategoryCount(category) {
+        return ServicesRemote.getData().then(() => {
+            return getCategory(category).then((result) => {
+                console.log('result', result);
+                return result.length;
+            });
+        });
+    }
+
+    static getCategory(category) {
+        return ServicesRemote.getData().then(() => {
+            return getCategory(category).then((result) => {
+                return result;
+            });
+        });
+    }
+
+    static getTweet(slug) {
+        return ServicesRemote.getData().then(() => {
+            return getTweet(slug).then((result) => {
+                return result;
+            });
+        });
+    }
+
+    static findTweet(searchText) {
+        return ServicesRemote.getData().then(() => {
+            return getTweetKeys().then((result) => {
+                const keys = [];
+                result.forEach((tweet) => {
+                    if (tweet.indexOf(searchText) !== -1) {
+                        keys.push(tweet);
+                    }
+                });
+                return Promise.all(keys.map((key) => {
+                    return getTweet(key);
+                }));
+
+            });
         });
     }
 }

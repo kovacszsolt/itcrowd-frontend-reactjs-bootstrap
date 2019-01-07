@@ -5,7 +5,7 @@ import {Helmet} from "react-helmet";
 import AppListCardCategory from "../list/category/Category";
 
 class AppFront extends Component {
-    service = new Services();
+
 
     constructor(props) {
         super(props);
@@ -16,14 +16,9 @@ class AppFront extends Component {
     }
 
     componentDidMount() {
-        this.service.getTweetsByCategorySlug(this.props.match.params.slug).then((getTweetsByCategoryResult) => {
+        Services.getCategory(this.props.match.params.slug).then((getTweetsByCategoryResult) => {
             this.setState({
                 'tweets': getTweetsByCategoryResult
-            });
-        });
-        this.service.getCategory().then((categoryListResult) => {
-            this.setState({
-                'category': categoryListResult
             });
         });
     }

@@ -9,11 +9,11 @@ const AppListCardCategory = (props) => {
         return null;
     } else {
         return (
-            <Fragment key={randomString({length: 20})}>
+            <Fragment key={props.category}>
                 {props.category.map((category) => {
                     return (
-                        <a key={category.title} href={'/tag/' + category.title}
-                           className="mr-1 badge badge-success">{category.title} ({category.count})</a>
+                        <a key={category} href={'/tag/' + category}
+                           className="mr-1 badge badge-success">{category}</a>
                     )
                 })
                 }
