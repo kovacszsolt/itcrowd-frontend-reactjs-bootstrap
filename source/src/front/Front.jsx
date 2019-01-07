@@ -1,13 +1,8 @@
 import React, {Component} from 'react';
 import AppList from "../list/list";
 import Services from "../Services";
-import AppListCardCategory from "../list/category/Category";
-import {getFromDatabase} from "../Services.indexeddb";
-import ServicesRemote from "../Services.remote";
 
 class AppFront extends Component {
-    service = new Services();
-
     currentPage = 1;
 
     constructor(props) {
@@ -58,6 +53,7 @@ class AppFront extends Component {
         if (this.state.tweets.length === 0) {
             return null;
         } else {
+            console.log(this.state.tweets);
             return (
                 <div className="row" id={"content"}>
                     <AppList tweets={this.state.tweets}></AppList>

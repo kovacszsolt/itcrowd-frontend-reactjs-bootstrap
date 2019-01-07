@@ -4,7 +4,6 @@ import Services from "../Services";
 import './Search.css';
 
 class AppSearch extends Component {
-    service = new Services();
 
     constructor(props) {
         super(props);

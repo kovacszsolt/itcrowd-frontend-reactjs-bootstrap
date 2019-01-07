@@ -16,7 +16,7 @@ const AppListCard = (props) => {
                     <small className="text-muted">{props.tweet.createTime}</small>
                 </p>
                 <AppListCardCategory category={props.tweet.tags}/>
-                <p className="card-text">{props.tweet.content}</p>
+                <p className="card-text">{props.tweet.description}</p>
 
             </div>
         </div>

@@ -18,7 +18,7 @@ class App extends Component {
         return (
             <Fragment>
                 <Helmet>
-                    <meta name="google-site-verification" content={process.env.REACT_APP_GOOGLE_SITE_VERIFICATION} />
+                    <meta name="google-site-verification" content={process.env.REACT_APP_GOOGLE_SITE_VERIFICATION}/>
                 </Helmet>
                 <Router>
                     <div className="w-100 p-3">

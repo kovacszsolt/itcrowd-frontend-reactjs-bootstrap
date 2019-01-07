@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "private": false,
   "dependencies": {
-    "random-string": "^0.2.0",
     "react": "^16.6.0",
     "react-dom": "^16.6.0",
     "react-ga": "^2.5.3",

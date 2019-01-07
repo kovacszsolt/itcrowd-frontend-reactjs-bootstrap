@@ -1,7 +1,6 @@
 import React, {Fragment} from 'react';
 import './Category.css';
 
-const randomString = require('random-string');
 
 
 const AppListCardCategory = (props) => {

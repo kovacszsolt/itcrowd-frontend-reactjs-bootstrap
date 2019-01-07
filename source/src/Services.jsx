@@ -1,8 +1,6 @@
 import ServicesRemote from "./Services.remote";
 import {getCategory, getTweet, getTweetKeys, getTweets} from "./Services.indexeddb";
 
-const ITEMS_PET_PAGE = 6;
-
 class Services {
     static getData() {
         return ServicesRemote.getData();
