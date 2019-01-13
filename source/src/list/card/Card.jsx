@@ -6,7 +6,7 @@ import AppListCardCategory from "../category/Category";
 const AppListCard = (props) => {
     return (
 
-        <div className="card rounded-0  border border-primary ">
+        <div className="card rounded-0  border border-secondary mb-3">
             <img className="card-img-top rounded-0"
                  src={process.env.REACT_APP_REACT_IMAGE_PATH +'size1/'+ props.tweet.slug + "."+props.tweet.extension}
                  alt={props.tweet.title}/>

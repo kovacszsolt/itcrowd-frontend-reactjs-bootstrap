@@ -16,27 +16,36 @@ class AppSearch extends Component {
     }
 
     componentDidMount() {
-        this.setState({search: this.props.match.params.searchtext});
         this.readData(this.props.match.params.searchtext);
     }
 
     readData(searchText) {
+
         Services.findTweet(searchText).then((tweetListResult) => {
-            this.setState({
-                'tweets': tweetListResult
-            });
-            if (this.state.firstStart) {
-                this.setState({
-                    'firstStart': false
-                });
+            let firstStart = this.state.firstStart;
+            if (firstStart) {
+                firstStart = false;
             }
+            this.setState({
+                'tweets': tweetListResult,
+                'firstStart': firstStart,
+                search: searchText
+            });
         });
+
+
     }
 
     handleChange(event) {
-        this.setState({search: event.target.value});
-        this.props.history.push('/search/' + event.target.value);
-        this.readData(event.target.value);
+        const searchText = event.target.value;
+        if (searchText.length > 3) {
+            this.props.history.push('/search/' + event.target.value);
+            this.readData(event.target.value);
+        } else {
+            this.setState({
+                search: searchText
+            });
+        }
     }
 
     render() {
