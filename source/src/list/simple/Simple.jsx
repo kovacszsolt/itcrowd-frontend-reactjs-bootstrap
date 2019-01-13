@@ -4,8 +4,8 @@ import {Link} from "react-router-dom";
 const AppListSimple = (props) => {
     if (props.tweets !== null) {
         return (
-            <ul className="list-group border border-primary  h-100">
-                <li className="list-group-item active rounded-0">Related Contents</li>
+            <ul className="list-group border border-primary  h-100 w-100">
+                <li className="list-group-item active rounded-0">{props.title} ({props.tweets.length})</li>
                 {props.tweets.map((tweet) => {
                     return (
                         <li key={tweet._id} className="list-group-item"><Link

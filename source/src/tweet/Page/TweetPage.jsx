@@ -5,7 +5,7 @@ import {Helmet} from "react-helmet";
 
 const AppTweetPage = (props) => {
     return (
-        <div className="container">
+        <div className="container mt-5">
             <Helmet>
                 <title>{props.tweet.title}</title>
                 <meta name="description" content={props.tweet.content}/>
@@ -24,12 +24,12 @@ const AppTweetPage = (props) => {
                     <h1>{props.tweet.title}</h1>
                     <AppListCardCategory category={props.tweet.tags}/>
                     <p> {props.tweet.description}</p>
-                    <a className="btn btn-info btn-block " target={"_blank"} href={props.tweet.url}>jump
+                    <a className="btn btn-danger btn-block " target={"_blank"} href={props.tweet.url}>jump
                         to the
                         article</a>
                 </div>
                 <div className="col-md-4">
-                    <AppListSimple tweets={props.tweetRelationList}></AppListSimple>
+                    <AppListSimple tweets={props.tweetRelationList} title={'Related Content'} ></AppListSimple>
                 </div>
             </div>
         </div>

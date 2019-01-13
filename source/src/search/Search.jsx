@@ -2,6 +2,7 @@ import React, {Component, Fragment} from 'react';
 import AppList from "../list/list";
 import Services from "../Services";
 import './Search.css';
+import AppListSimple from "../list/simple/Simple";
 
 class AppSearch extends Component {
 
@@ -50,8 +51,8 @@ class AppSearch extends Component {
 
     render() {
         return (
-            <div className="row mt-5">
-                <div className="col-md-12 fixed-top mt-6">
+            <div className="row mt-6">
+                <div className="col-md-12 mb-2">
                     <input className="form-control mr-sm-2" type="search" placeholder="Search"
                            value={this.state.search}
                            onChange={(e) => {
@@ -61,7 +62,7 @@ class AppSearch extends Component {
                 </div>
                 <Fragment>
                     {(this.state.tweets.length !== 0) ? (
-                        <AppList tweets={this.state.tweets}></AppList>
+                        <AppListSimple tweets={this.state.tweets} title={'Search Result'}></AppListSimple>
                     ) : (
                         (this.state.firstStart) ? (
                             <div className="d-flex justify-content-center">
